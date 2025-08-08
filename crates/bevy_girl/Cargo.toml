@@ -1,0 +1,24 @@
+[package]
+authors.workspace = true
+categories.workspace = true
+description = "Gamepad Input Rust Library"
+edition.workspace = true
+homepage.workspace = true
+keywords = ["bevy", "gamepad", "input", "sdl2"]
+license.workspace = true
+name = "bevy_girl"
+publish = true
+readme = "README.md"
+repository.workspace = true
+rust-version.workspace = true
+version = "0.0.1"
+
+[dependencies]
+bevy = { version = "0.16.0", default-features = false }
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--default-theme=ayu", "--document-private-items", "--generate-link-to-definition", "-Zunstable-options"]
