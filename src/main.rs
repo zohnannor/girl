@@ -1,136 +1,84 @@
-#![allow(missing_docs, unsafe_code)]
+use std::{thread, time::Duration};
 
-use std::{ffi::CStr, time::Instant};
+#[cfg(feature = "sensors")]
+use girl::Sensor;
+use girl::{Button, Girl, Stick, Trigger};
 
-use sdl2_sys::{
-    SDL_Event, SDL_EventType, SDL_GameControllerClose,
-    SDL_GameControllerFromInstanceID, SDL_GameControllerGetSensorData,
-    SDL_GameControllerGetSensorDataRate, SDL_GameControllerName,
-    SDL_GameControllerOpen, SDL_GameControllerSetSensorEnabled, SDL_GetError,
-    SDL_INIT_GAMECONTROLLER, SDL_Init, SDL_NumJoysticks, SDL_Quit,
-    SDL_SensorType, SDL_WaitEvent, SDL_bool, Uint32,
-};
+fn main() -> Result<(), girl::Error> {
+    tracing_subscriber::fmt::init();
 
-macro_rules! assert_ok {
-    ($condition:expr, $context:literal $(,)?) => {
-        if !$condition {
-            let err = unsafe { SDL_GetError() };
-            let error = unsafe { CStr::from_ptr(err) };
-            panic!(
-                "[{}:{}:{}] {}: {}",
-                file!(),
-                line!(),
-                column!(),
-                $context,
-                error.to_str().unwrap()
-            );
+    let mut girl = Girl::new()?;
+
+    let gamepads = girl.gamepads_connected().len();
+    dbg!(gamepads);
+
+    let Some(mut gamepad) = girl.gamepad(0) else {
+        println!("No gamepad connected!");
+        return Ok(());
+    };
+    println!("{} connected", gamepad.name());
+
+    #[cfg(feature = "sensors")]
+    if gamepad.has_sensor(Sensor::Gyroscope) {
+        gamepad.enable_sensor(Sensor::Gyroscope)?;
+    }
+    #[cfg(feature = "sensors")]
+    if gamepad.has_sensor(Sensor::Accelerometer) {
+        gamepad.enable_sensor(Sensor::Accelerometer)?;
+    }
+
+    loop {
+        girl.update();
+
+        if !gamepad.connected()
+            && let Some(gp) = girl.gamepad(0)
+        {
+            gamepad = gp;
         }
-    };
-}
 
-#[allow(clippy::too_many_lines)]
-fn main() {
-    {
-        let res = unsafe { SDL_Init(SDL_INIT_GAMECONTROLLER) };
-        assert_ok!(res >= 0, "SDL_Init failed");
-    }
+        if gamepad.connected() && gamepad.has_led() {
+            let left = gamepad.trigger(Trigger::Left);
+            let right = gamepad.trigger(Trigger::Right);
 
-    {
-        let num_joysticks = unsafe { SDL_NumJoysticks() };
-        dbg!(num_joysticks);
-        assert_ok!(num_joysticks > 0, "No controllers detected");
-    }
+            let red = (left * 255.0) as u8;
+            let green = (right * 255.0) as u8;
 
-    let controller = unsafe { SDL_GameControllerOpen(0) };
-    assert_ok!(!controller.is_null(), "Couldn't open controller");
+            gamepad.set_led(red, green, 0)?;
+        }
 
-    {
-        let res = unsafe { SDL_GameControllerName(controller) };
-        assert_ok!(!res.is_null(), "Couldn't get controller name");
-        let name = unsafe { CStr::from_ptr(res) };
-        println!("Controller opened: {}", name.to_string_lossy());
-    }
-
-    {
-        let res = unsafe {
-            SDL_GameControllerSetSensorEnabled(
-                controller,
-                SDL_SensorType::SDL_SENSOR_GYRO,
-                SDL_bool::SDL_TRUE,
-            )
-        };
-        assert_ok!(res == 0, "Couldn't enable gyroscope");
-        println!("Gyroscope enabled");
-    }
-
-    let rate = unsafe {
-        SDL_GameControllerGetSensorDataRate(
-            controller,
-            SDL_SensorType::SDL_SENSOR_GYRO,
-        )
-    };
-    assert_ok!(rate != 0.0, "Couldn't get sensor data rate");
-    println!("Gyroscope data rate: {rate} Hz");
-
-    let mut event = SDL_Event { type_: 0 };
-
-    println!("Waiting for gyro events... (move your controller)");
-
-    let mut event_count = 0;
-    let time = Instant::now();
-
-    while event_count < 200 {
-        const SDL_QUIT: Uint32 = SDL_EventType::SDL_QUIT as _;
-        const SDL_CONTROLLERSENSORUPDATE: Uint32 =
-            SDL_EventType::SDL_CONTROLLERSENSORUPDATE as _;
-
-        let good = unsafe { SDL_WaitEvent(&raw mut event) };
-        assert_ok!(good > 0, "SDL_WaitEvent failed");
-        if good > 0 {
-            match unsafe { event.type_ } {
-                SDL_QUIT => break,
-                SDL_CONTROLLERSENSORUPDATE => {
-                    let controller_event = unsafe { event.csensor };
-
-                    let event_controller = unsafe {
-                        SDL_GameControllerFromInstanceID(controller_event.which)
-                    };
-                    assert_ok!(
-                        !event_controller.is_null(),
-                        "Couldn't get controller"
-                    );
-
-                    if event_controller == controller {
-                        let mut data = [0.0f32; 3];
-                        let res = unsafe {
-                            SDL_GameControllerGetSensorData(
-                                controller,
-                                SDL_SensorType::SDL_SENSOR_GYRO,
-                                data.as_mut_ptr(),
-                                3,
-                            )
-                        };
-                        assert_ok!(res == 0, "Couldn't read gyroscope data");
-
-                        event_count += 1;
-
-                        println!(
-                            "[{:+8.8?}] Event \
-                             {}: x={:>+8.8}, y={:>+8.8}, z={:>+8.8}",
-                            time.elapsed(),
-                            event_count,
-                            data[0],
-                            data[1],
-                            data[2]
-                        );
-                    }
-                }
-                _ => {}
+        if gamepad.has_rumble() {
+            if gamepad.buttons_pressed(Button::A | Button::B) {
+                gamepad.set_rumble(
+                    u16::MAX,
+                    u16::MAX,
+                    Duration::from_millis(100),
+                )?;
+            } else if gamepad.buttons_pressed(Button::A) {
+                gamepad.set_rumble(u16::MAX, 0, Duration::from_millis(100))?;
+            } else if gamepad.buttons_pressed(Button::B) {
+                gamepad.set_rumble(0, u16::MAX, Duration::from_millis(100))?;
+            } else {
+                gamepad.end_rumble()?;
             }
         }
-    }
 
-    unsafe { SDL_GameControllerClose(controller) };
-    unsafe { SDL_Quit() };
-    println!("Clean exit");
+        println!(
+            "{gamepad:10}, {:6.3?} {:6.3?} {:6.3?} {:6.3?} {:6.3?} {:6.3?}",
+            gamepad.buttons(Button::all()),
+            gamepad.stick(Stick::Right),
+            gamepad.trigger(Trigger::Right),
+            {
+                #[cfg(feature = "sensors")]
+                gamepad.sensor(Sensor::Gyroscope)
+            },
+            {
+                #[cfg(feature = "sensors")]
+                gamepad.sensor(Sensor::Accelerometer)
+            },
+            gamepad.touchpad(),
+            gamepad = gamepad,
+        );
+
+        thread::sleep(Duration::from_millis(10));
+    }
 }

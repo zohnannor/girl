@@ -13,14 +13,33 @@ repository.workspace = true
 rust-version.workspace = true
 version = "0.0.1"
 
-[dependencies]
-libc = "0.2.174"
-sdl2-sys = { version = "0.38.0", features = ["bundled", "static-link"] }
-tracing = "0.1.41"
+[dependencies.bitflags]
+default-features = false
+version = "2.9.1"
+
+[dependencies.tracing]
+default-features = false
+version = "0.1.41"
+
+[dependencies.sdl2]
+default-features = false
+features = ["bundled", "static-link"]
+version = "0.38.0"
+
+[dev-dependencies]
+tracing-subscriber = "0.3.19"
+
+[features]
+sensors = ["sdl2/hidapi"]
 
 [lints]
 workspace = true
 
 [package.metadata.docs.rs]
 all-features = true
-rustdoc-args = ["--default-theme=ayu", "--document-private-items", "--generate-link-to-definition", "-Zunstable-options"]
+rustdoc-args = [
+    "-Zunstable-options",
+    "--default-theme=ayu",
+    "--document-private-items",
+    "--generate-link-to-definition",
+]

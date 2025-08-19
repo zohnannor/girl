@@ -21,8 +21,10 @@ rust-version.workspace = true
 
 # TODO: same as above
 [dependencies]
-girl = { path = "./crates/girl" }
-sdl2-sys = { version = "0.38.0", features = ["bundled", "static-link"] }
+girl = { path = "./crates/girl", default-features = false }
+tracing-subscriber = { version = "0.3.19", features = [
+    "fmt",
+], default-features = false }
 
 # Not actually used, for surviving MSRV checks only.
 cmake = "^0.1.51"
@@ -30,6 +32,14 @@ erased-serde = "^0.4.0"
 indexmap = "^2.6.0"
 lock_api = "^0.4.7"
 log = "^0.4.4"
+
+[features]
+sensors = ["girl/sensors"]
+
+# TODO: remove when https://github.com/Rust-SDL2/rust-sdl2/issues/1500 is
+#       resolved
+[patch.crates-io]
+sdl2 = { git = "https://github.com/osimarr/rust-sdl2" }
 
 [workspace.lints.clippy]
 absolute_paths = "warn"
@@ -103,7 +113,6 @@ field_scoped_visibility_modifiers = "warn"
 filetype_is_file = "warn"
 filter_map_next = "warn"
 flat_map_option = "warn"
-float_arithmetic = "warn"
 float_cmp = "warn"
 float_cmp_const = "warn"
 fn_params_excessive_bools = "warn"
@@ -184,7 +193,6 @@ missing_errors_doc = "warn"
 missing_fields_in_debug = "warn"
 missing_inline_in_public_items = "warn"
 missing_panics_doc = "warn"
-missing_trait_methods = "warn"
 mixed_read_write_in_expression = "warn"
 mod_module_files = "warn"
 module_name_repetitions = "warn"
@@ -230,7 +238,6 @@ print_stdout = "warn"
 ptr_as_ptr = "warn"
 ptr_cast_constness = "warn"
 pub_underscore_fields = "warn"
-pub_use = "warn"
 pub_without_shorthand = "warn"
 range_minus_one = "warn"
 range_plus_one = "warn"
@@ -256,7 +263,6 @@ same_functions_in_if_condition = "warn"
 same_name_method = "warn"
 self_named_module_files = "warn"
 semicolon_if_nothing_returned = "warn"
-semicolon_inside_block = "warn"
 semicolon_outside_block = "warn"
 separated_literal_suffix = "warn"
 set_contains_or_insert = "warn"
@@ -315,12 +321,9 @@ unnecessary_self_imports = "warn"
 unnecessary_semicolon = "warn"
 unnecessary_struct_initialization = "warn"
 unnecessary_wraps = "warn"
-unneeded_field_pattern = "warn"
 unnested_or_patterns = "warn"
-unreachable = "warn"
 unreadable_literal = "warn"
 unsafe_derive_deserialize = "warn"
-unseparated_literal_suffix = "warn"
 unused_async = "warn"
 unused_peekable = "warn"
 unused_result_ok = "warn"
@@ -411,7 +414,7 @@ invalid_codeblock_attributes = "warn"
 invalid_html_tags = "warn"
 invalid_rust_codeblocks = "warn"
 missing_crate_level_docs = "warn"
-missing_doc_code_examples = "warn"
+# missing_doc_code_examples = "warn" # doesn't work yet :(
 private_doc_tests = "warn"
 private_intra_doc_links = "warn"
 redundant_explicit_links = "warn"

@@ -1,23 +1,37 @@
-//! TODO docs
+#![cfg_attr(doc, doc = include_str!("../README.md"))]
+//! <br>
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
-mod controllersystem;
 mod event;
-mod util;
+mod gamepad;
+mod gamepadmanager;
 
-use std::{io, sync::mpsc};
+#[cfg(test)]
+mod unused {
+    use tracing_subscriber as _;
+}
 
-/// TODO docs
+use tracing as _;
+
+#[cfg(feature = "sensors")]
+#[cfg_attr(docsrs, doc(cfg(feature = "sensors")))]
+pub use crate::gamepad::Sensor;
+pub use crate::{
+    event::Event,
+    gamepad::{
+        Button, Gamepad, PowerLevel, Stick, TouchpadAction, TouchpadEvent,
+        TouchpadState, Trigger,
+    },
+    gamepadmanager::{ConnectedGamepads, Girl},
+};
+
+/// Error types that can occur when working with gamepad input.
 #[non_exhaustive]
 #[derive(Debug)]
-enum Error {
-    /// TODO docs
-    #[expect(dead_code, reason = "not for inspecting")]
-    RuntimeInit(io::Error),
+pub enum Error {
+    /// SDL2 failed to initialize.
+    Sdl2Init(String),
 
-    /// TODO docs
-    Sdl2Init,
-
-    /// TODO docs
-    #[expect(dead_code, reason = "not for inspecting")]
-    Send(mpsc::SendError<event::Event>),
+    /// An error occurred in the SDL2 subsystem.
+    SdlError(String),
 }

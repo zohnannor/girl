@@ -1,0 +1,6 @@
+allowed-idents-below-min-chars = ["..", "f"]
+check-private-items = true
+missing-docs-allow-unused = true
+module-items-ordered-within-groupings = ["modules", "use"]
+source-item-ordering = ["module", "trait"]
+struct-field-name-threshold = 1
