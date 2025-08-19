@@ -28,8 +28,7 @@ workspace = true
 [package.metadata.docs.rs]
 all-features = true
 rustdoc-args = [
-    "--default-theme=ayu",
-    "--document-private-items",
-    "--generate-link-to-definition",
     "-Zunstable-options",
+    "--default-theme=ayu",
+    "--generate-link-to-definition",
 ]

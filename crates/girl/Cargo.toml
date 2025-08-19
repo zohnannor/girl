@@ -40,6 +40,5 @@ all-features = true
 rustdoc-args = [
     "-Zunstable-options",
     "--default-theme=ayu",
-    "--document-private-items",
     "--generate-link-to-definition",
 ]
