@@ -11,6 +11,9 @@ pub(crate) mod sensors;
 #[cfg_attr(docsrs, doc(cfg(feature = "touchpad")))]
 pub(crate) mod touchpad;
 
+use alloc::string::{String, ToString as _};
+#[cfg(feature = "touchpad")]
+use alloc::{vec, vec::Vec};
 use core::{cmp, fmt, hash};
 
 use sdl2::{

@@ -1,5 +1,7 @@
 //! Sensor data for a [`Gamepad`].
 
+use alloc::string::ToString as _;
+
 use sdl2::sensor::SensorType as SdlSensorType;
 
 use crate::{Error, Gamepad};

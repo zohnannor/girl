@@ -1,18 +1,32 @@
 #![cfg_attr(doc, doc = include_str!("../README.md"))]
-//! <br>
+//! ## Feature flags
+#![cfg_attr(
+    feature = "document-features",
+    cfg_attr(doc, doc = ::document_features::document_features!())
+)]
 #![cfg_attr(docsrs, feature(doc_cfg))]
+#![no_std]
+
+extern crate alloc;
+#[cfg(feature = "std")]
+extern crate std;
 
 mod event;
 mod gamepad;
 mod gamepadmanager;
 
 mod unused {
-    //! Not actually used, dev-dependency for example/demo.
+    //! Only used for documentation.
+    use document_features as _;
+    // Not actually used, dev-dependency for example/demo.
     #[cfg(test)]
     use tracing_subscriber as _;
 }
 
+use alloc::string::String;
+
 // TODO: logging
+#[cfg(feature = "tracing")]
 use tracing as _;
 
 #[cfg(feature = "sensors")]

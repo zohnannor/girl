@@ -1,5 +1,6 @@
 //! Rumble capabilities of a [`Gamepad`].
 
+use alloc::string::ToString as _;
 use core::time::Duration;
 
 use crate::{Error, Gamepad};

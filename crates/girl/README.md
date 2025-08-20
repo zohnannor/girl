@@ -2,10 +2,12 @@
 
 > It's a **G**amepad **I**nput **R**ust **L**ibrary!
 
-[![Crates.io](https://img.shields.io/crates/v/girl?style=for-the-badge&logo=rust)](https://crates.io/crates/girl)
-[![docs.rs](https://img.shields.io/docsrs/girl/latest?style=for-the-badge&logo=docsdotrs)](https://docs.rs/girl)
+[![github repo](https://img.shields.io/badge/github-zohnannor/girl-946d8c?style=for-the-badge&logo=github)](https://github.com/zohnannor/girl/tree/main/crates/girl)
+[![crates.io version](https://img.shields.io/crates/v/girl?style=for-the-badge&logo=rust)](https://crates.io/crates/girl)
+[![docs.rs status](https://img.shields.io/docsrs/girl/latest?style=for-the-badge&logo=docsdotrs)](https://docs.rs/girl)
+[![github actions workflow status](https://img.shields.io/github/actions/workflow/status/zohnannor/girl/ci.yml?branch=main&style=for-the-badge&logo=github)](https://github.com/zohnannor/girl/actions/workflows/ci.yml)
 
-### Example
+## Example
 
 ```rust
 use std::{thread, time::Duration};
@@ -87,6 +89,10 @@ fn main() -> Result<(), girl::Error> {
     # Ok(()) // for doctests
 }
 ```
+
+## `no_std`
+
+`girl` is `no_std` compatible.
 
 ## License
 

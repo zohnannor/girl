@@ -17,8 +17,10 @@ version = "0.0.1"
 default-features = false
 version = "2.9.2"
 
+## Enable logging with `tracing`.
 [dependencies.tracing]
 default-features = false
+optional = true
 version = "0.1.41"
 
 [dependencies.sdl2]
@@ -29,10 +31,21 @@ version = "0.38.0"
 [dev-dependencies]
 tracing-subscriber = "0.3.19"
 
+[dependencies.document-features]
+optional = true
+version = "0.2.11"
+
 [features]
+default = ["std", "sensors", "touchpad", "rumble", "tracing"]
+## Enable rumble support.
 rumble = []
+## Enable sensor (gyroscope, accelerometer) support.
 sensors = ["sdl2/hidapi"]
+## Enable `std` support. The crate is `no_std` compatible.
+std = []
+## Enable touchpad support.
 touchpad = []
+tracing = ["dep:tracing"]
 
 [lints]
 workspace = true
@@ -47,4 +60,5 @@ rustdoc-args = [
     "-Zunstable-options",
     "--default-theme=ayu",
     "--generate-link-to-definition",
+    "--cfg docsrs",
 ]

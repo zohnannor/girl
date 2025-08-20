@@ -1,6 +1,64 @@
 allowed-idents-below-min-chars = ["..", "f"]
 check-private-items = true
 missing-docs-allow-unused = true
+module-item-order-groupings = [
+    [ # changed:
+        "externs",
+        [
+            "extern_crate",
+        ],
+    ],
+    [
+        "modules",
+        [
+            "mod",
+            "foreign_mod",
+        ],
+    ],
+    [
+        "use",
+        [
+            "use",
+        ],
+    ],
+    [
+        "macros",
+        [
+            "macro",
+        ],
+    ],
+    [
+        "global_asm",
+        [
+            "global_asm",
+        ],
+    ],
+    [
+        "UPPER_SNAKE_CASE",
+        [
+            "static",
+            "const",
+        ],
+    ],
+    [
+        "PascalCase",
+        [
+            "ty_alias",
+            "enum",
+            "struct",
+            "union",
+            "trait",
+            "trait_alias",
+            "impl",
+        ],
+    ],
+    [
+        "lower_snake_case",
+        [
+            "fn",
+        ],
+    ],
+]
 module-items-ordered-within-groupings = ["modules", "use"]
 source-item-ordering = ["module", "trait"]
 struct-field-name-threshold = 1

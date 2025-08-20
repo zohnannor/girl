@@ -5,7 +5,7 @@
 [![github repo](https://img.shields.io/badge/github-zohnannor/girl-946d8c?style=for-the-badge&logo=github)](https://github.com/zohnannor/girl)
 [![crates.io version](https://img.shields.io/crates/v/bevy_girl?style=for-the-badge&logo=rust)](https://crates.io/crates/bevy_girl)
 [![docs.rs status](https://img.shields.io/docsrs/bevy_girl/latest?style=for-the-badge&logo=docsdotrs)](https://docs.rs/bevy_girl)
-[![github actions workflow status](https://img.shields.io/github/actions/workflow/status/zohnannor/bevy_girl/ci.yml?branch=main&style=for-the-badge&logo=github)](https://github.com/zohnannor/girl/actions/workflows/ci.yml)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/zohnannor/girl/ci.yml?branch=main&style=for-the-badge&logo=github)](https://github.com/zohnannor/girl/actions/workflows/ci.yml)
 
 `todo!()`
 

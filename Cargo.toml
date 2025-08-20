@@ -8,7 +8,7 @@ repository = "https://github.com/zohnann/girl"
 rust-version = "1.89"
 
 [workspace]
-members = ["crates/*"]
+members = ["crates/*", "."]
 resolver = "3"
 
 [package]
@@ -48,9 +48,16 @@ default-features = false
 features = ["fmt"]
 version = "0.3.19"
 
+[dependencies.document-features]
+optional = true
+version = "0.2.11"
+
 [features]
+default = ["std"]
 sensors = ["girl/sensors"]
+std = ["bevy/std", "girl/std"]
 touchpad = ["girl/touchpad"]
+web = ["bevy/web"]
 
 [lints]
 workspace = true
@@ -61,6 +68,7 @@ rustdoc-args = [
     "-Zunstable-options",
     "--default-theme=ayu",
     "--generate-link-to-definition",
+    "--cfg docsrs",
 ]
 
 # TODO: remove when https://github.com/Rust-SDL2/rust-sdl2/issues/1500 is

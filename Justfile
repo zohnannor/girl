@@ -26,7 +26,7 @@ alias t := test
 # Build docs
 doc no_deps="" private="" open="":
     RUSTDOCFLAGS="${RUSTDOCFLAGS:-} -Zunstable-options --default-theme=ayu --generate-link-to-definition --cfg docsrs" \
-    cargo +nightly hack doc --workspace --feature-powerset \
+    cargo +nightly hack doc --workspace --feature-powerset --features "docs" \
         {{ if no_deps == "" { no_deps } else { "--no-deps" } }} \
         {{ if private == "" { private } else { "--document-private-items" } }} \
         {{ if open == "" { open } else { "--open" } }}
