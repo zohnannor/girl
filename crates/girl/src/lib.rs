@@ -6,21 +6,28 @@ mod event;
 mod gamepad;
 mod gamepadmanager;
 
-#[cfg(test)]
 mod unused {
+    //! Not actually used, dev-dependency for example/demo.
+    #[cfg(test)]
     use tracing_subscriber as _;
 }
 
+// TODO: logging
 use tracing as _;
 
 #[cfg(feature = "sensors")]
 #[cfg_attr(docsrs, doc(cfg(feature = "sensors")))]
-pub use crate::gamepad::Sensor;
+pub use crate::gamepad::sensors::Sensor;
+#[cfg(feature = "touchpad")]
+#[cfg_attr(docsrs, doc(cfg(feature = "touchpad")))]
+pub use crate::gamepad::touchpad::{
+    TouchpadAction, TouchpadEvent, TouchpadState,
+};
 pub use crate::{
     event::Event,
     gamepad::{
-        Button, Gamepad, PowerLevel, Stick, TouchpadAction, TouchpadEvent,
-        TouchpadState, Trigger,
+        Gamepad, PowerLevel,
+        input::{Button, Stick, Trigger},
     },
     gamepadmanager::{ConnectedGamepads, Girl},
 };

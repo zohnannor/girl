@@ -15,7 +15,7 @@ version = "0.0.1"
 
 [dependencies.bitflags]
 default-features = false
-version = "2.9.1"
+version = "2.9.2"
 
 [dependencies.tracing]
 default-features = false
@@ -30,10 +30,16 @@ version = "0.38.0"
 tracing-subscriber = "0.3.19"
 
 [features]
+rumble = []
 sensors = ["sdl2/hidapi"]
+touchpad = []
 
 [lints]
 workspace = true
+
+[[example]]
+name = "demo"
+required-features = ["sensors", "touchpad", "rumble"]
 
 [package.metadata.docs.rs]
 all-features = true

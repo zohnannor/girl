@@ -11,30 +11,57 @@ rust-version = "1.89"
 members = ["crates/*"]
 resolver = "3"
 
-# TODO: remove and create examples in crates/* instead. this is just for testing
-#       and tinkering.
 [package]
+authors.workspace = true
+categories.workspace = true
+description = "Gamepad Input Rust Library Plugin for Bevy"
 edition.workspace = true
-name = "girl-wip"
-publish = false
+homepage.workspace = true
+keywords = ["bevy", "gamepad", "input", "sdl2"]
+license.workspace = true
+name = "bevy_girl"
+publish = true
+readme = "README.md"
+repository.workspace = true
 rust-version.workspace = true
+version = "0.0.1"
 
-# TODO: same as above
-[dependencies]
-girl = { path = "./crates/girl", default-features = false }
-tracing-subscriber = { version = "0.3.19", features = [
-    "fmt",
-], default-features = false }
+[dependencies.bevy]
+default-features = false
+version = "0.16.0"
+
+[dependencies.girl]
+default-features = false
+path = "./crates/girl"
+version = "0.0.1"
 
 # Not actually used, for surviving MSRV checks only.
+[dependencies]
 cmake = "^0.1.51"
 erased-serde = "^0.4.0"
 indexmap = "^2.6.0"
 lock_api = "^0.4.7"
 log = "^0.4.4"
 
+[dev-dependencies.tracing-subscriber]
+default-features = false
+features = ["fmt"]
+version = "0.3.19"
+
 [features]
 sensors = ["girl/sensors"]
+touchpad = ["girl/touchpad"]
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = [
+    "-Zunstable-options",
+    "--default-theme=ayu",
+    "--generate-link-to-definition",
+]
 
 # TODO: remove when https://github.com/Rust-SDL2/rust-sdl2/issues/1500 is
 #       resolved
@@ -194,7 +221,6 @@ missing_fields_in_debug = "warn"
 missing_inline_in_public_items = "warn"
 missing_panics_doc = "warn"
 mixed_read_write_in_expression = "warn"
-mod_module_files = "warn"
 module_name_repetitions = "warn"
 modulo_arithmetic = "warn"
 # multiple_crate_versions = "warn" # false-positives
@@ -263,7 +289,7 @@ same_functions_in_if_condition = "warn"
 same_name_method = "warn"
 self_named_module_files = "warn"
 semicolon_if_nothing_returned = "warn"
-semicolon_outside_block = "warn"
+semicolon_inside_block = "warn"
 separated_literal_suffix = "warn"
 set_contains_or_insert = "warn"
 shadow_same = "warn"

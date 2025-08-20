@@ -4,12 +4,14 @@ use sdl2::{controller::Axis as SdlAxis, event::Event as SdlEvent};
 
 #[cfg(feature = "sensors")]
 use crate::Sensor;
+#[cfg(feature = "touchpad")]
+use crate::TouchpadEvent;
 use crate::{
-    Button, Gamepad, Stick, TouchpadEvent, Trigger,
-    gamepad::{AXIS_MAX, map},
+    Button, Gamepad, Stick, Trigger,
+    gamepad::{input::AXIS_MAX, map},
 };
 
-/// Input events that can be processed by the library
+/// Input events that can be processed by the library.
 #[non_exhaustive]
 #[derive(Debug, Clone, Copy)]
 pub enum Event {
@@ -77,6 +79,8 @@ pub enum Event {
     },
 
     /// Touchpad event.
+    #[cfg(feature = "touchpad")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "touchpad")))]
     ControllerTouchpad(TouchpadEvent),
 
     /// Sensor data updated.
@@ -172,15 +176,22 @@ impl Event {
             SdlEvent::ControllerSteamHandleUpdate { timestamp: _, which } => {
                 Self::ControllerSteamHandleUpdate { which }
             }
+            #[cfg(feature = "touchpad")]
             SdlEvent::ControllerTouchpadDown { .. } => {
                 Self::ControllerTouchpad(TouchpadEvent::from_sdl(event)?)
             }
+            #[cfg(feature = "touchpad")]
             SdlEvent::ControllerTouchpadMotion { .. } => {
                 Self::ControllerTouchpad(TouchpadEvent::from_sdl(event)?)
             }
+            #[cfg(feature = "touchpad")]
             SdlEvent::ControllerTouchpadUp { .. } => {
                 Self::ControllerTouchpad(TouchpadEvent::from_sdl(event)?)
             }
+            #[cfg(not(feature = "touchpad"))]
+            SdlEvent::ControllerTouchpadDown { .. }
+            | SdlEvent::ControllerTouchpadMotion { .. }
+            | SdlEvent::ControllerTouchpadUp { .. } => return None,
             #[cfg(feature = "sensors")]
             SdlEvent::ControllerSensorUpdated {
                 timestamp: _,

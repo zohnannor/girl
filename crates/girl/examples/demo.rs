@@ -1,8 +1,18 @@
+//! A demo of main `girl` features.
+#![expect(
+    unused_crate_dependencies,
+    clippy::absolute_paths,
+    clippy::dbg_macro,
+    clippy::print_stdout,
+    clippy::cast_possible_truncation,
+    clippy::cast_sign_loss,
+    clippy::use_debug,
+    reason = "demo"
+)]
+
 use std::{thread, time::Duration};
 
-#[cfg(feature = "sensors")]
-use girl::Sensor;
-use girl::{Button, Girl, Stick, Trigger};
+use girl::{Button, Girl, Sensor, Stick, Trigger};
 
 fn main() -> Result<(), girl::Error> {
     tracing_subscriber::fmt::init();
@@ -18,11 +28,9 @@ fn main() -> Result<(), girl::Error> {
     };
     println!("{} connected", gamepad.name());
 
-    #[cfg(feature = "sensors")]
     if gamepad.has_sensor(Sensor::Gyroscope) {
         gamepad.enable_sensor(Sensor::Gyroscope)?;
     }
-    #[cfg(feature = "sensors")]
     if gamepad.has_sensor(Sensor::Accelerometer) {
         gamepad.enable_sensor(Sensor::Accelerometer)?;
     }
@@ -67,14 +75,8 @@ fn main() -> Result<(), girl::Error> {
             gamepad.buttons(Button::all()),
             gamepad.stick(Stick::Right),
             gamepad.trigger(Trigger::Right),
-            {
-                #[cfg(feature = "sensors")]
-                gamepad.sensor(Sensor::Gyroscope)
-            },
-            {
-                #[cfg(feature = "sensors")]
-                gamepad.sensor(Sensor::Accelerometer)
-            },
+            gamepad.sensor(Sensor::Gyroscope),
+            gamepad.sensor(Sensor::Accelerometer),
             gamepad.touchpad(),
             gamepad = gamepad,
         );
