@@ -42,6 +42,10 @@ msrv:
     cargo hack check --workspace --feature-powerset
     cargo update
 
+# Check that the crate compiles on no-std
+no-std target="":
+    cargo check --workspace --no-default-features {{ if target == "" { target } else { "--target " + target } }}
+
 # Run all checks (~local CI)
 ci: fmt clippy test doc msrv
     @echo "All checks passed! :)"

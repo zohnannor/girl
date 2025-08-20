@@ -18,6 +18,7 @@ mod unused {
     //! Not actually used, for surviving MSRV checks only.
     use cmake as _;
     // Only used for documentation.
+    #[cfg(feature = "document-features")]
     use document_features as _;
     use erased_serde as _;
     use indexmap as _;

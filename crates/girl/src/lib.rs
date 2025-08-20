@@ -17,6 +17,7 @@ mod gamepadmanager;
 
 mod unused {
     //! Only used for documentation.
+    #[cfg(feature = "document-features")]
     use document_features as _;
     // Not actually used, dev-dependency for example/demo.
     #[cfg(test)]
