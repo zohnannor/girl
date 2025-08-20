@@ -5,11 +5,6 @@
     cfg_attr(doc, doc = ::document_features::document_features!())
 )]
 #![cfg_attr(docsrs, feature(doc_cfg))]
-#![no_std]
-
-extern crate alloc;
-#[cfg(feature = "std")]
-extern crate std;
 
 mod event;
 mod gamepad;
@@ -23,8 +18,6 @@ mod unused {
     #[cfg(test)]
     use tracing_subscriber as _;
 }
-
-use alloc::string::String;
 
 // TODO: logging
 #[cfg(feature = "tracing")]

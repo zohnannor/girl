@@ -26,7 +26,7 @@ alias t := test
 # Build docs
 doc no_deps="" private="" open="":
     RUSTDOCFLAGS="${RUSTDOCFLAGS:-} -Zunstable-options --default-theme=ayu --generate-link-to-definition --cfg docsrs" \
-    cargo +nightly hack doc --workspace --feature-powerset --features "docs" \
+    cargo +nightly hack doc --workspace --feature-powerset --features "document-features" \
         {{ if no_deps == "" { no_deps } else { "--no-deps" } }} \
         {{ if private == "" { private } else { "--document-private-items" } }} \
         {{ if open == "" { open } else { "--open" } }}
@@ -41,10 +41,6 @@ msrv:
     cargo +nightly update -Z minimal-versions
     cargo hack check --workspace --feature-powerset
     cargo update
-
-# Check that the crate compiles on no-std
-no-std target="":
-    cargo check --workspace --no-default-features {{ if target == "" { target } else { "--target " + target } }}
 
 # Run all checks (~local CI)
 ci: fmt clippy test doc msrv

@@ -1,7 +1,5 @@
 //! Touchpad data for a [`Gamepad`].
 
-use alloc::{vec, vec::Vec};
-
 use sdl2::{event::Event as SdlEvent, sys as sdl2_sys};
 
 use crate::{Error, Gamepad};

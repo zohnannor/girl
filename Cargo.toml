@@ -53,9 +53,8 @@ optional = true
 version = "0.2.11"
 
 [features]
-default = ["std"]
+default = []
 sensors = ["girl/sensors"]
-std = ["bevy/std", "girl/std"]
 touchpad = ["girl/touchpad"]
 web = ["bevy/web"]
 

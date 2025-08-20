@@ -1,4 +1,3 @@
-# TODO: miri, no_std
 # https://github.com/jonhoo/rust-ci-conf/tree/main/.github/workflows
 
 name: CI
@@ -88,21 +87,3 @@ jobs:
             - uses: taiki-e/install-action@just
             - uses: taiki-e/install-action@cargo-hack
             - run: just msrv
-
-    no-std:
-        runs-on: ubuntu-latest
-        strategy:
-            fail-fast: false
-            matrix:
-                target:
-                    - 'x86_64-unknown-none'
-                    - 'wasm32v1-none'
-                    - 'thumbv6m-none-eabi'
-        steps:
-            - uses: actions/checkout@v4
-            - uses: dtolnay/rust-toolchain@stable
-              with:
-                  targets: ${{ matrix.target }}
-            - uses: taiki-e/install-action@just
-            - uses: taiki-e/install-action@cargo-hack
-            - run: just no-std ${{ matrix.target }}

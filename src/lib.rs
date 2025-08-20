@@ -5,11 +5,6 @@
     cfg_attr(doc, doc = ::document_features::document_features!())
 )]
 #![cfg_attr(docsrs, feature(doc_cfg))]
-#![no_std]
-
-// extern crate alloc;
-#[cfg(feature = "std")]
-extern crate std;
 
 use bevy as _;
 use girl as _;

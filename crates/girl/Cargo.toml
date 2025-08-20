@@ -36,13 +36,11 @@ optional = true
 version = "0.2.11"
 
 [features]
-default = ["std", "sensors", "touchpad", "rumble", "tracing"]
+default = ["sensors", "touchpad", "rumble", "tracing"]
 ## Enable rumble support.
 rumble = []
 ## Enable sensor (gyroscope, accelerometer) support.
 sensors = ["sdl2/hidapi"]
-## Enable `std` support. The crate is `no_std` compatible.
-std = []
 ## Enable touchpad support.
 touchpad = []
 tracing = ["dep:tracing"]
